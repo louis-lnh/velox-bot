@@ -1,0 +1,9 @@
+discord server links
+register site überarbeiten damit es passt
+home page price pool hinzufügen
+scl logo
+logos für jedes team
+farbe reinbekommen
+stats reload fast
+alle teams eintragen (mock data entfernen)
+alle matches erstellen
