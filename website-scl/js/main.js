@@ -61,11 +61,12 @@ async function renderStandings() {
 }
 
 // ======================================================
-// RENDER MATCHES
+// RENDER MATCHES WITH MATCHDAY FILTER
 // ======================================================
 async function renderMatches() {
     const container = document.querySelector("#matches-container");
-    if (!container) return;
+    const selector = document.querySelector("#matchday-select");
+    if (!container || !selector) return;
 
     const matches = await getJSON("/matches");
 
@@ -74,16 +75,40 @@ async function renderMatches() {
         return;
     }
 
-    container.innerHTML = "";
+    // Build matchday list
+    const matchdays = [...new Set(matches.map(m => m.matchday))].sort((a,b)=>a-b);
+
+    // Populate dropdown only once
+    if (selector.options.length === 1) {
+        matchdays.forEach(md => {
+            const opt = document.createElement("option");
+            opt.value = md;
+            opt.textContent = `Matchday ${md}`;
+            selector.appendChild(opt);
+        });
+    }
+
+    // Handle filtering
+    selector.onchange = () => renderMatches();
+
+    // Determine active matchday
+    const selected = selector.value;
+
+    // Filter matches
+    const filtered = selected === "all"
+        ? matches
+        : matches.filter(m => m.matchday == selected);
 
     // Group by matchday
     const grouped = {};
-    matches.forEach((m) => {
+    filtered.forEach((m) => {
         if (!grouped[m.matchday]) grouped[m.matchday] = [];
         grouped[m.matchday].push(m);
     });
 
-    // Render matchdays
+    // Render
+    container.innerHTML = "";
+
     for (const matchday of Object.keys(grouped)) {
         const title = document.createElement("h2");
         title.textContent = `Matchday ${matchday}`;
@@ -93,14 +118,13 @@ async function renderMatches() {
             const card = document.createElement("div");
             card.className = "match-card";
 
-            const score =
-                m.status === "COMPLETED"
-                    ? `${m.scoreHome} - ${m.scoreAway}`
-                    : "TBD";
+            const score = m.status === "COMPLETED" && m.scoreHome !== null
+                ? `${m.scoreHome} - ${m.scoreAway}`
+                : "TBD";
 
             card.innerHTML = `
                 <div class="match-team">${m.homeTeam} vs ${m.awayTeam}</div>
-                <div class="match-status">${m.status}</div>
+                <div class="match-status">Status: ${m.status}</div>
                 <div class="match-status">Score: ${score}</div>
             `;
 
@@ -108,6 +132,7 @@ async function renderMatches() {
         });
     }
 }
+
 
 // ======================================================
 // RENDER TEAMS
