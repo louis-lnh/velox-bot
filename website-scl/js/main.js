@@ -158,6 +158,11 @@ async function renderTeams() {
             <div class="team-logo-placeholder"></div>
             <h3>${t.name}</h3>
         `;
+        card.style.cursor = "pointer";
+        card.onclick = () => {
+            window.location.href = `team.html?id=${t.id}`;
+        };
+
 
         container.appendChild(card);
     });
