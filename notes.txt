@@ -1,10 +1,19 @@
-discord server links
-register site überarbeiten damit es passt
-home page price pool hinzufügen
-scl logo
-logos für jedes team
-farbe reinbekommen
-stats reload fast
-alle teams eintragen (mock data entfernen)
-alle matches erstellen
-update readme
+Notes for this project:
+
+SCL:
+1. Website:
+    - Discord Server links 
+    - Register Site überarbeiten damit alles passt
+    - PricePool zur Homepage hinzufügen 
+    - SCL Logo hinzufügen
+    - Logos für jedes team hinzufügen
+    - Mehr Farbe in die website integrieren
+    - Stats für alles schneller reloaden
+    - Alle Teams eintragen
+    - Alle Matches eintragen
+    - ReadMe updaten
+2. Bot:
+    - Alle commands die der Bot brauchen wird erstellen
+
+VLX:
+1. Team website 
