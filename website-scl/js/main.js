@@ -21,6 +21,9 @@ async function getJSON(endpoint) {
 // STANDINGS
 // ======================================================
 async function renderStandings() {
+    const loading = document.querySelector("#loading-standings");
+    if (loading) loading.style.display = "block";
+
     const tableBody = document.querySelector("#standings-body");
     if (!tableBody) return; // not on this page
 
@@ -57,7 +60,10 @@ async function renderStandings() {
         `;
 
         tableBody.appendChild(row);
+        
     });
+    if (loading) loading.style.display = "none";
+
 }
 
 // ======================================================
