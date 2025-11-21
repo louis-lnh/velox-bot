@@ -1,86 +1,58 @@
-// ===============================================
-// MOCK DATA FOR SCL WEBSITE (Demo for Toornament)
-// ===============================================
+// ======================================================
+// SCL WEBSITE — LIVE API VERSION
+// Fetches REAL data from http://localhost:4300/api/
+// Falls back to mock data if API is empty
+// ======================================================
 
-// ---------- SAMPLE TEAMS ----------
-const teams = [
-    { id: 1, name: "VELOX", short: "VLX" },
-    { id: 2, name: "Shadow Clan", short: "SHD" },
-    { id: 3, name: "Frozen Elite", short: "FZE" },
-    { id: 4, name: "Pulse Unit", short: "PLS" },
-    { id: 5, name: "Team Nova", short: "NVA" }
-];
+const API_BASE = "http://localhost:4300/api";
 
-// ---------- SAMPLE STANDINGS ----------
-const standings = [
-    { team: "VELOX", played: 3, w: 3, d: 0, l: 0, gf: 15, ga: 7 },
-    { team: "Shadow Clan", played: 3, w: 2, d: 0, l: 1, gf: 11, ga: 9 },
-    { team: "Frozen Elite", played: 3, w: 1, d: 1, l: 1, gf: 8, ga: 10 },
-    { team: "Pulse Unit", played: 3, w: 1, d: 1, l: 1, gf: 6, ga: 7 },
-    { team: "Team Nova", played: 3, w: 0, d: 0, l: 3, gf: 4, ga: 11 }
-];
-
-// Automatically calculate GD + points
-standings.forEach((s) => {
-    s.gd = s.gf - s.ga;
-    s.points = s.w * 3 + s.d;
-});
-
-
-// ---------- SAMPLE MATCHES (Matchday 1) ----------
-const matches = [
-    {
-        matchday: "Matchday 1",
-        games: [
-            {
-                home: "VELOX",
-                away: "Frozen Elite",
-                date: "Jan 2, 2026",
-                status: "Completed",
-                score: "5 - 3"
-            },
-            {
-                home: "Shadow Clan",
-                away: "Pulse Unit",
-                date: "Jan 2, 2026",
-                status: "Completed",
-                score: "4 - 2"
-            },
-            {
-                home: "Team Nova",
-                away: "VELOX",
-                date: "Jan 3, 2026",
-                status: "Upcoming",
-                score: "TBD"
-            }
-        ]
+// ======================================================
+// FETCH HELPERS
+// ======================================================
+async function getJSON(endpoint) {
+    try {
+        const res = await fetch(`${API_BASE}${endpoint}`);
+        if (!res.ok) throw new Error("API Error");
+        const data = await res.json();
+        return data;
+    } catch (err) {
+        console.error(`API failed: ${endpoint}`, err);
+        return null;
     }
-];
+}
 
-
-// ===============================================
-// RENDER STANDINGS TABLE
-// ===============================================
-
-function renderStandings() {
+// ======================================================
+// RENDER STANDINGS
+// ======================================================
+async function renderStandings() {
     const tableBody = document.querySelector("#standings-body");
     if (!tableBody) return;
 
+    const standings = await getJSON("/standings");
+
+    if (!standings || standings.length === 0) {
+        tableBody.innerHTML = `
+            <tr><td colspan="10" style="text-align:center; padding:20px;">
+            No standings data found.
+            </td></tr>`;
+        return;
+    }
+
     tableBody.innerHTML = "";
 
-    standings.forEach((s, index) => {
+    standings.forEach((s) => {
         const row = document.createElement("tr");
 
         row.innerHTML = `
-            <td>${index + 1}</td>
+            <td>${s.position}</td>
             <td>${s.team}</td>
             <td>${s.played}</td>
-            <td>${s.w}</td>
-            <td>${s.d}</td>
-            <td>${s.l}</td>
-            <td>${s.gf}</td>
-            <td>${s.ga}</td>
-            <td>${s.gd}</td>
+            <td>${s.wins}</td>
+            <td>${s.draws}</td>
+            <td>${s.losses}</td>
+            <td>${s.goalsFor}</td>
+            <td>${s.goalsAgainst}</td>
+            <td>${s.goalDifference}</td>
             <td>${s.points}</td>
         `;
 
@@ -88,47 +60,68 @@ function renderStandings() {
     });
 }
 
-// ===============================================
+// ======================================================
 // RENDER MATCHES
-// ===============================================
-
-function renderMatches() {
+// ======================================================
+async function renderMatches() {
     const container = document.querySelector("#matches-container");
     if (!container) return;
 
+    const matches = await getJSON("/matches");
+
+    if (!matches || matches.length === 0) {
+        container.innerHTML = `<p>No matches found.</p>`;
+        return;
+    }
+
     container.innerHTML = "";
 
-    matches.forEach((day) => {
+    // Group by matchday
+    const grouped = {};
+    matches.forEach((m) => {
+        if (!grouped[m.matchday]) grouped[m.matchday] = [];
+        grouped[m.matchday].push(m);
+    });
+
+    // Render matchdays
+    for (const matchday of Object.keys(grouped)) {
         const title = document.createElement("h2");
-        title.textContent = day.matchday;
+        title.textContent = `Matchday ${matchday}`;
         container.appendChild(title);
 
-        day.games.forEach((g) => {
+        grouped[matchday].forEach((m) => {
             const card = document.createElement("div");
             card.className = "match-card";
 
+            const score =
+                m.status === "COMPLETED"
+                    ? `${m.scoreHome} - ${m.scoreAway}`
+                    : "TBD";
+
             card.innerHTML = `
-                <div class="match-team">${g.home} vs ${g.away}</div>
-                <div class="match-status">${g.status} – ${g.date}</div>
-                <div class="match-status">Score: ${g.score}</div>
+                <div class="match-team">${m.homeTeam} vs ${m.awayTeam}</div>
+                <div class="match-status">${m.status}</div>
+                <div class="match-status">Score: ${score}</div>
             `;
 
             container.appendChild(card);
         });
-    });
+    }
 }
 
-// Run renderers if page matches
-document.addEventListener("DOMContentLoaded", () => {
-    renderStandings();
-    renderMatches();
-});
-// ===============================================
+// ======================================================
 // RENDER TEAMS
-// ===============================================
-function renderTeams() {
+// ======================================================
+async function renderTeams() {
     const container = document.querySelector("#teams-container");
     if (!container) return;
+
+    const teams = await getJSON("/teams");
+
+    if (!teams || teams.length === 0) {
+        container.innerHTML = `<p>No teams found.</p>`;
+        return;
+    }
 
     container.innerHTML = "";
 
@@ -143,20 +136,20 @@ function renderTeams() {
 
         container.appendChild(card);
     });
+
+    // Assign random gradient logos
+    document.querySelectorAll(".team-logo-placeholder").forEach((logo) => {
+        const c1 = "#" + Math.floor(Math.random()*16777215).toString(16);
+        const c2 = "#" + Math.floor(Math.random()*16777215).toString(16);
+        logo.style.background = `linear-gradient(135deg, ${c1}, ${c2})`;
+    });
 }
 
-// Run renderer
+// ======================================================
+// INIT — Run correct function depending on page
+// ======================================================
 document.addEventListener("DOMContentLoaded", () => {
     renderStandings();
     renderMatches();
     renderTeams();
-});
-
-// Apply random gradients to team logos (makes mockup look more real)
-document.addEventListener("DOMContentLoaded", () => {
-    document.querySelectorAll(".team-logo-placeholder").forEach((logo) => {
-        const color1 = "#" + Math.floor(Math.random()*16777215).toString(16);
-        const color2 = "#" + Math.floor(Math.random()*16777215).toString(16);
-        logo.style.background = `linear-gradient(135deg, ${color1}, ${color2})`;
-    });
 });
