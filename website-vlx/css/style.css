@@ -1,0 +1,77 @@
+/* =======================================
+   GLOBAL STYLES FOR VLX WEBSITE
+   ======================================= */
+
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap');
+
+body {
+    margin: 0;
+    padding: 0;
+    background: linear-gradient(90deg, #0056FF, #0A0A0A);
+    font-family: 'Inter', sans-serif;
+    color: #e6e6e6;
+}
+
+/* =======================================
+   NAVBAR
+   ======================================= */
+nav {
+    width: 100%;
+    background: #111623;
+    padding: 20px 0;
+    box-shadow: 0 2px 10px rgba(0,0,0,0.4);
+    display: flex;
+    justify-content: center;
+}
+
+.nav-container {
+    width: 90%;
+    max-width: 1200px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+nav .logo {
+    font-size: 24px;
+    font-weight: 700;
+    color: #6c5ce7;
+    text-transform: uppercase;
+    letter-spacing: 2px;
+}
+
+nav ul {
+    list-style: none;
+    display: flex;
+    gap: 25px;
+    margin: 0;
+    padding: 0;
+}
+
+nav a {
+    text-decoration: none;
+    color: #e6e6e6;
+    font-weight: 500;
+    transition: 0.2s;
+}
+
+nav a:hover {
+    color: #6c5ce7;
+}
+
+/* =======================================
+   FOOTER
+   ======================================= */
+footer {
+    margin-top: 60px;
+    padding: 30px 0;
+    background: #111623;
+    text-align: center;
+    color: #aaa;
+    font-size: 14px;
+}
+
+footer a {
+    color: #6c5ce7;
+    text-decoration: none;
+}

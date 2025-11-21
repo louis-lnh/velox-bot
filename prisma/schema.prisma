@@ -1,0 +1,197 @@
+datasource db {
+  provider = "sqlite"
+  url      = env("DATABASE_URL")
+}
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+model GuildConfig {
+  id            String   @id @default(cuid())
+  guildId       String   @unique
+  autoroleId    String?
+  createdAt     DateTime @default(now())
+  updatedAt     DateTime @updatedAt
+}
+model Warning {
+  id        String   @id @default(cuid())
+  guildId   String
+  userId    String
+  moderator String
+  reason    String
+  createdAt DateTime @default(now())
+}
+model Tournament {
+  id          Int               @id @default(autoincrement())
+  name        String
+  slug        String            @unique
+  season      String?
+  description String?
+  status      TournamentStatus  @default(PLANNED)
+  createdAt   DateTime          @default(now())
+  updatedAt   DateTime          @updatedAt
+
+  teams       Team[]
+  matches     Match[]
+  standings   Standing[]
+}
+
+enum TournamentStatus {
+  PLANNED
+  ACTIVE
+  COMPLETED
+}
+
+model Team {
+  id             Int        @id @default(autoincrement())
+  name           String
+  shortName      String?
+  tag            String?
+  logoUrl        String?
+  primaryColor   String?
+  secondaryColor String?
+
+  tournamentId   Int
+  tournament     Tournament @relation(fields: [tournamentId], references: [id])
+
+  players        Player[]
+  homeMatches    Match[]    @relation("HomeTeam")
+  awayMatches    Match[]    @relation("AwayTeam")
+  standings      Standing[]
+}
+
+model Player {
+  id          Int     @id @default(autoincrement())
+  displayName String
+  discordId   String? @unique
+  role        String?
+
+  teamId      Int
+  team        Team    @relation(fields: [teamId], references: [id])
+}
+
+model Match {
+  id            Int        @id @default(autoincrement())
+
+  tournamentId  Int
+  tournament    Tournament @relation(fields: [tournamentId], references: [id])
+
+  round         Int
+  matchDay      Int?
+
+  scheduledAt   DateTime?
+  status        MatchStatus @default(PLANNED)
+
+  homeTeamId    Int
+  awayTeamId    Int
+  homeTeam      Team       @relation("HomeTeam", fields: [homeTeamId], references: [id])
+  awayTeam      Team       @relation("AwayTeam", fields: [awayTeamId], references: [id])
+
+  scoreHome     Int?
+  scoreAway     Int?
+  reportedAt    DateTime?
+}
+
+enum MatchStatus {
+  PLANNED
+  ONGOING
+  COMPLETED
+}
+
+model Standing {
+  id           Int        @id @default(autoincrement())
+
+  tournamentId Int
+  tournament   Tournament @relation(fields: [tournamentId], references: [id])
+
+  teamId       Int
+  team         Team       @relation(fields: [teamId], references: [id])
+
+  played       Int        @default(0)
+  wins         Int        @default(0)
+  draws        Int        @default(0)
+  losses       Int        @default(0)
+  goalsFor     Int        @default(0)
+  goalsAgainst Int        @default(0)
+  points       Int        @default(0)
+}
+
+/* ===========================================
+   SCL-SPECIFIC MODELS (REAL SYSTEM)
+   =========================================== */
+
+model SclTeam {
+  id              Int           @id @default(autoincrement())
+  name            String
+  shortName       String?
+  tag             String?
+  logoUrl         String?
+  region          String?
+  toornamentId    String?       @unique
+  discordRoleId   String?
+  discordChannelId String?
+
+  createdAt       DateTime      @default(now())
+  updatedAt       DateTime      @updatedAt
+
+  players         SclPlayer[]
+  homeMatches     SclMatch[]    @relation("SclHomeTeam")
+  awayMatches     SclMatch[]    @relation("SclAwayTeam")
+  standing        SclStanding?
+}
+
+model SclPlayer {
+  id          Int           @id @default(autoincrement())
+  discordId   String
+  displayName String
+  role        SclPlayerRole @default(PLAYER)
+
+  teamId      Int
+  team        SclTeam       @relation(fields: [teamId], references: [id])
+}
+
+enum SclPlayerRole {
+  PLAYER
+  LEADER
+  STAFF
+}
+
+model SclMatch {
+  id                Int             @id @default(autoincrement())
+  matchday          Int
+  homeTeamId        Int
+  awayTeamId        Int
+
+  homeTeam          SclTeam         @relation("SclHomeTeam", fields: [homeTeamId], references: [id])
+  awayTeam          SclTeam         @relation("SclAwayTeam", fields: [awayTeamId], references: [id])
+
+  scheduledAt       DateTime?
+  status            SclMatchStatus  @default(PLANNED)
+
+  scoreHome         Int?
+  scoreAway         Int?
+
+  toornamentMatchId String?
+  reportedAt        DateTime?
+}
+
+enum SclMatchStatus {
+  PLANNED
+  ONGOING
+  COMPLETED
+}
+
+model SclStanding {
+  id           Int      @id @default(autoincrement())
+  teamId       Int      @unique
+  team         SclTeam  @relation(fields: [teamId], references: [id])
+
+  played       Int      @default(0)
+  wins         Int      @default(0)
+  draws        Int      @default(0)
+  losses       Int      @default(0)
+  goalsFor     Int      @default(0)
+  goalsAgainst Int      @default(0)
+  points       Int      @default(0)
+}

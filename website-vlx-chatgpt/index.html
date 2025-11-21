@@ -1,0 +1,220 @@
+<!DOCTYPE html> 
+<html lang="de">
+  <head>
+    <meta charset="UTF-8" />
+    <title>VELOX Esports – HOME</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta
+      name="description"
+      content="VELOX Esports – Rocket League Sideswipe Organisation & Sideswipe Championship League."
+    />
+    <link rel="stylesheet" href="styles.css" />
+  </head>
+  <body class="page">
+    <div class="app-shell">
+      <div class="app-inner">
+        <header>
+          <div class="status-bar">
+            <div class="status-bar-left">
+              <div class="status-dot"></div>
+              <div class="status-pill">Matchday Hub Online</div>
+            </div>
+            <div class="status-bar-right">
+              <div class="status-ping">
+                <div class="status-ping-inner"></div>
+              </div>
+              <span>Ping · &lt; 25 ms</span>
+              <span>Season 1 · SCL</span>
+            </div>
+          </div>
+          <nav class="navbar">
+            <div class="nav-left">
+              <div class="logo-mark">
+                <span>VLX</span>
+              </div>
+              <div class="logo-text">
+                <div class="logo-text-main">VELOX ESPORTS</div>
+                <div class="logo-text-sub">Rocket League Sideswipe</div>
+              </div>
+            </div>
+            <div class="nav-links">
+              <a href="index.html">Home</a>
+              <a href="about.html">Über uns</a>
+              <a href="teams.html">Teams</a>
+              <a href="scl.html">SCL</a>
+              <a href="news.html">News</a>
+              <a href="partners.html">Partner</a>
+              <a href="contact.html">Kontakt</a>
+            </div>
+            <div class="nav-cta">
+              <a href="#" class="btn btn-outline">
+                <span class="dot"></span> Join Discord
+              </a>
+              <a href="scl.html" class="btn btn-primary">SCL Standings</a>
+            </div>
+            <button class="nav-toggle" aria-label="Menü öffnen">
+              <span></span>
+              <span></span>
+              <span></span>
+            </button>
+          </nav>
+        </header>
+
+<main>
+  <div class="container">
+    <section class="hero">
+      <div class="hero-main">
+        <div class="hero-badge">
+          <div class="hero-badge-dot"></div>
+          <span>Sideswipe Championship League · Season 1</span>
+        </div>
+        <h1 class="hero-title">
+          VELOX <span class="highlight">Esports</span> · SCL
+        </h1>
+        <p class="hero-subtitle">
+          VELOX ist eine kompetitive Organisation in Rocket League Sideswipe und Host der
+          <span class="text-accent">Sideswipe Championship League</span> – einer Liga mit 32 eingeladenen Teams,
+          langfristiger Struktur und klaren Standards.
+        </p>
+        <div class="hero-ctas">
+          <a href="scl.html" class="btn btn-primary">Zur SCL Übersicht</a>
+          <a href="teams.html" class="btn btn-outline">Unsere Teams ansehen</a>
+        </div>
+        <div class="hero-meta">
+          <div class="hero-meta-item">
+            <span class="hero-meta-label">Teams</span>
+            <span class="hero-meta-value">32 Invited Teams</span>
+          </div>
+          <div class="hero-meta-item">
+            <span class="hero-meta-label">Season Start</span>
+            <span class="hero-meta-value">01. Januar 2026</span>
+          </div>
+          <div class="hero-meta-item">
+            <span class="hero-meta-label">Matchdays</span>
+            <span class="hero-meta-value">Primär Wochenenden</span>
+          </div>
+        </div>
+      </div>
+
+      <aside class="hero-side">
+        <div class="panel">
+          <div class="panel-header">
+            <div class="panel-title">Live Season Snapshot</div>
+            <div class="chip">Season 1 · Beta Layout</div>
+          </div>
+          <div class="table-wrapper">
+            <table class="table">
+              <thead>
+                <tr>
+                  <th>Pos</th>
+                  <th>Tag</th>
+                  <th>Team</th>
+                  <th>Pts</th>
+                </tr>
+              </thead>
+              <tbody id="standings-body">
+                <!-- Wird von main.js auf scl.html befüllt – hier nur Dummy -->
+                <tr>
+                  <td>1</td>
+                  <td>VLX</td>
+                  <td>VELOX Esports</td>
+                  <td>15</td>
+                </tr>
+                <tr>
+                  <td>2</td>
+                  <td>EXO</td>
+                  <td>EXO Esports</td>
+                  <td>12</td>
+                </tr>
+                <tr>
+                  <td>3</td>
+                  <td>NVS</td>
+                  <td>Nova Strike</td>
+                  <td>9</td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+
+        <div class="panel">
+          <div class="panel-header">
+            <div class="panel-title">Quick Links</div>
+            <div class="chip">League Essentials</div>
+          </div>
+          <div class="card-grid">
+            <div class="card">
+              <div class="card-label">SCL Overview</div>
+              <div class="card-title">Liga-Struktur & Infos</div>
+              <div class="card-meta">Spielplan, Format, Regeln, Zeitplan.</div>
+            </div>
+            <div class="card">
+              <div class="card-label">Standings</div>
+              <div class="card-title">Aktuelle Tabelle</div>
+              <div class="card-meta">Automatisierte Standings geplant.</div>
+            </div>
+            <div class="card">
+              <div class="card-label">Teams</div>
+              <div class="card-title">Teilnehmende Orgs</div>
+              <div class="card-meta">32 Teams aus der Sideswipe Szene.</div>
+            </div>
+          </div>
+        </div>
+      </aside>
+    </section>
+
+    <section class="section">
+      <div class="section-header">
+        <div>
+          <div class="section-title">VELOX ESPORTS</div>
+          <h2>Was dich bei VELOX erwartet</h2>
+        </div>
+        <p class="section-kicker">
+          Struktur statt Chaos – klare Events, feste Ligen und ein Fokus auf Rocket League Sideswipe.
+        </p>
+      </div>
+
+      <div class="card-grid">
+        <div class="card">
+          <div class="card-label">Events</div>
+          <div class="card-title">Strukturierte Turniere</div>
+          <p class="card-meta">
+            Interne und öffentliche Events, geplante Saisons und feste Matchdays – ohne spontanes Durcheinander.
+          </p>
+        </div>
+        <div class="card">
+          <div class="card-label">SCL</div>
+          <div class="card-title">Sideswipe Championship League</div>
+          <p class="card-meta">
+            Eine Liga mit Hinrunde, klarer Tabelle und motivierten Teams, die den Titel holen wollen.
+          </p>
+        </div>
+        <div class="card">
+          <div class="card-label">Community</div>
+          <div class="card-title">Server & Struktur</div>
+          <p class="card-meta">
+            Getrennte Server für Orga & Liga, klare Rollen, Channels und ein Bot, der Übersicht schafft.
+          </p>
+        </div>
+      </div>
+    </section>
+  </div>
+</main>
+
+
+        <footer class="footer">
+          <div class="footer-left">
+            <span class="footer-pill">© VELOX Esports</span>
+            <span>Rocket League Sideswipe · Sideswipe Championship League</span>
+          </div>
+          <div class="footer-right">
+            <a href="#" class="footer-link">Discord</a>
+            <a href="#" class="footer-link">Twitter / X</a>
+            <a href="#" class="footer-link">Impressum</a>
+          </div>
+        </footer>
+      </div>
+    </div>
+    <script src="main.js"></script>
+  </body>
+</html>
