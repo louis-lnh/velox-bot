@@ -1,2 +1,1 @@
-# velox-bot
-# my attempt to create a discord bot
+# System for VLX
