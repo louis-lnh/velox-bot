@@ -7,3 +7,4 @@ farbe reinbekommen
 stats reload fast
 alle teams eintragen (mock data entfernen)
 alle matches erstellen
+update readme
