@@ -50,7 +50,9 @@ async function renderStandings() {
             <td>${s.losses}</td>
             <td>${s.goalsFor}</td>
             <td>${s.goalsAgainst}</td>
-            <td>${s.goalDifference}</td>
+            <td class="${s.goalDifference > 0 ? 'stat-positive' : s.goalDifference < 0 ? 'stat-negative' : ''}">
+                ${s.goalDifference}
+            </td>
             <td>${s.points}</td>
         `;
 
@@ -181,4 +183,11 @@ document.addEventListener("DOMContentLoaded", () => {
     renderStandings();
     renderMatches();
     renderTeams();
+    const refreshBtn = document.querySelector("#refresh-standings");
+    if (refreshBtn) {
+        refreshBtn.onclick = () => {
+            renderStandings();
+        };
+    }
+
 });
