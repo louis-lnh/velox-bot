@@ -3,38 +3,46 @@
 <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <link rel="stylesheet" href="css/style.css">
-    <title>Team Details</title>
+    <title>SCL – Team Details</title>
+    <link rel="stylesheet" href="css/style.css" />
 </head>
+
 <body>
 
-<nav>
-    <ul>
-        <li><a href="index.html">Home</a></li>
-        <li><a href="standings.html">Standings</a></li>
-        <li><a href="matches.html">Matches</a></li>
-        <li><a href="teams.html">Teams</a></li>
-        <li><a href="register.html">Register</a></li>
-    </ul>
-</nav>
+    <nav>
+        <div class="nav-container">
+            <div class="logo">SCL</div>
+            <ul>
+                <li><a href="index.html">Home</a></li>
+                <li><a href="standings.html">Standings</a></li>
+                <li><a href="matches.html">Matches</a></li>
+                <li><a href="teams.html">Teams</a></li>
+                <li><a href="register.html">Register</a></li>
+            </ul>
+        </div>
+    </nav>
 
-<div class="page-container">
+    <div class="page-container">
+        <h1 id="team-name">Loading team...</h1>
 
-    <h1 id="team-name">Loading...</h1>
+        <div class="team-logo-placeholder" style="margin:20px auto;"></div>
 
-    <div class="team-logo-placeholder" style="margin:20px auto;"></div>
+        <h2>Stats</h2>
+        <div id="team-stats">Loading stats...</div>
 
-    <h2>Roster</h2>
-    <ul id="player-list"></ul>
+        <h2>Matches</h2>
+        <div id="team-matches">Loading matches...</div>
 
-    <h2>Stats</h2>
-    <div id="team-stats"></div>
+        <h2>Roster</h2>
+        <ul id="player-list">
+            <li>Roster support coming soon.</li>
+        </ul>
+    </div>
 
-    <h2>Matches</h2>
-    <div id="team-matches"></div>
+    <footer>
+        © 2025 SCL • Powered by Toornament
+    </footer>
 
-</div>
-
-<script src="js/team.js"></script>
+    <script src="js/team.js"></script>
 </body>
 </html>

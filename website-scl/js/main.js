@@ -1,20 +1,16 @@
 // ======================================================
 // SCL WEBSITE — LIVE API VERSION
-// Fetches REAL data from http://localhost:4300/api/
-// Falls back to mock data if API is empty
+// Fetches data from http://localhost:4300/api/
 // ======================================================
 
 const API_BASE = "http://localhost:4300/api";
 
-// ======================================================
-// FETCH HELPERS
-// ======================================================
+// ---------- helper ----------
 async function getJSON(endpoint) {
     try {
         const res = await fetch(`${API_BASE}${endpoint}`);
         if (!res.ok) throw new Error("API Error");
-        const data = await res.json();
-        return data;
+        return await res.json();
     } catch (err) {
         console.error(`API failed: ${endpoint}`, err);
         return null;
@@ -22,19 +18,21 @@ async function getJSON(endpoint) {
 }
 
 // ======================================================
-// RENDER STANDINGS
+// STANDINGS
 // ======================================================
 async function renderStandings() {
     const tableBody = document.querySelector("#standings-body");
-    if (!tableBody) return;
+    if (!tableBody) return; // not on this page
 
     const standings = await getJSON("/standings");
 
     if (!standings || standings.length === 0) {
         tableBody.innerHTML = `
-            <tr><td colspan="10" style="text-align:center; padding:20px;">
-            No standings data found.
-            </td></tr>`;
+            <tr>
+                <td colspan="10" style="text-align:center; padding:20px;">
+                    No standings data found.
+                </td>
+            </tr>`;
         return;
     }
 
@@ -61,12 +59,12 @@ async function renderStandings() {
 }
 
 // ======================================================
-// RENDER MATCHES WITH MATCHDAY FILTER
+// MATCHES + MATCHDAY FILTER
 // ======================================================
 async function renderMatches() {
     const container = document.querySelector("#matches-container");
     const selector = document.querySelector("#matchday-select");
-    if (!container || !selector) return;
+    if (!container || !selector) return; // not on this page
 
     const matches = await getJSON("/matches");
 
@@ -75,12 +73,14 @@ async function renderMatches() {
         return;
     }
 
-    // Build matchday list
-    const matchdays = [...new Set(matches.map(m => m.matchday))].sort((a,b)=>a-b);
+    // build matchday list
+    const matchdays = [...new Set(matches.map((m) => m.matchday))].sort(
+        (a, b) => a - b
+    );
 
-    // Populate dropdown only once
+    // populate dropdown only once
     if (selector.options.length === 1) {
-        matchdays.forEach(md => {
+        matchdays.forEach((md) => {
             const opt = document.createElement("option");
             opt.value = md;
             opt.textContent = `Matchday ${md}`;
@@ -88,25 +88,23 @@ async function renderMatches() {
         });
     }
 
-    // Handle filtering
-    selector.onchange = () => renderMatches();
-
-    // Determine active matchday
+    // selected value
     const selected = selector.value;
 
-    // Filter matches
-    const filtered = selected === "all"
-        ? matches
-        : matches.filter(m => m.matchday == selected);
+    // refilter when user changes
+    selector.onchange = () => renderMatches();
 
-    // Group by matchday
+    const filtered =
+        selected === "all"
+            ? matches
+            : matches.filter((m) => m.matchday == selected);
+
     const grouped = {};
     filtered.forEach((m) => {
         if (!grouped[m.matchday]) grouped[m.matchday] = [];
         grouped[m.matchday].push(m);
     });
 
-    // Render
     container.innerHTML = "";
 
     for (const matchday of Object.keys(grouped)) {
@@ -118,9 +116,10 @@ async function renderMatches() {
             const card = document.createElement("div");
             card.className = "match-card";
 
-            const score = m.status === "COMPLETED" && m.scoreHome !== null
-                ? `${m.scoreHome} - ${m.scoreAway}`
-                : "TBD";
+            const score =
+                m.status === "COMPLETED" && m.scoreHome !== null
+                    ? `${m.scoreHome} - ${m.scoreAway}`
+                    : "TBD";
 
             card.innerHTML = `
                 <div class="match-team">${m.homeTeam} vs ${m.awayTeam}</div>
@@ -133,13 +132,12 @@ async function renderMatches() {
     }
 }
 
-
 // ======================================================
-// RENDER TEAMS
+// TEAMS (LIST) — CLICKABLE CARDS
 // ======================================================
 async function renderTeams() {
     const container = document.querySelector("#teams-container");
-    if (!container) return;
+    if (!container) return; // not on this page
 
     const teams = await getJSON("/teams");
 
@@ -158,25 +156,26 @@ async function renderTeams() {
             <div class="team-logo-placeholder"></div>
             <h3>${t.name}</h3>
         `;
+
+        // make card clickable -> team.html?id=TEAM_ID
         card.style.cursor = "pointer";
         card.onclick = () => {
             window.location.href = `team.html?id=${t.id}`;
         };
 
-
         container.appendChild(card);
     });
 
-    // Assign random gradient logos
+    // random gradients for logos
     document.querySelectorAll(".team-logo-placeholder").forEach((logo) => {
-        const c1 = "#" + Math.floor(Math.random()*16777215).toString(16);
-        const c2 = "#" + Math.floor(Math.random()*16777215).toString(16);
+        const c1 = "#" + Math.floor(Math.random() * 16777215).toString(16);
+        const c2 = "#" + Math.floor(Math.random() * 16777215).toString(16);
         logo.style.background = `linear-gradient(135deg, ${c1}, ${c2})`;
     });
 }
 
 // ======================================================
-// INIT — Run correct function depending on page
+// INIT
 // ======================================================
 document.addEventListener("DOMContentLoaded", () => {
     renderStandings();
