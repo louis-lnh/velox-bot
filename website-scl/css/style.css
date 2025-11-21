@@ -10,6 +10,8 @@ body {
     background: #0b0f19;
     font-family: 'Inter', sans-serif;
     color: #e6e6e6;
+    display: flex;
+    flex-direction: column;
 }
 
 /* =======================================
@@ -62,15 +64,18 @@ nav a:hover {
 /* =======================================
    FOOTER
    ======================================= */
+
 footer {
-    margin-top: 60px;
+    margin-top: auto;
     padding: 20px;
     text-align: center;
     background: #131826;
     color: #b9b9b9;
     font-size: 14px;
     border-top: 1px solid #1f2535;
+    width: 100%;
 }
+
 
 footer a {
     color: #6c5ce7;

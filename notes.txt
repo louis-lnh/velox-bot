@@ -12,6 +12,8 @@ SCL:
     - Alle Teams eintragen
     - Alle Matches eintragen
     - ReadMe updaten
+    - update footer - use br instead of p
+    - get the footer to the bottom
 2. Bot:
     - Alle commands die der Bot brauchen wird erstellen
 
